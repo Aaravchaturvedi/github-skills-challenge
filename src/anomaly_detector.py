@@ -13,6 +13,7 @@ class AnomalyDetector:
 
     def detect(self, record):
         reasons = []
+        log_level = str(record.get("log_level", "")).upper()
 
         if record["response_time_ms"] > self.response_time_threshold:
             reasons.append("High response time")
@@ -23,8 +24,7 @@ class AnomalyDetector:
         if record["memory_percent"] > self.memory_threshold:
             reasons.append("High memory utilization")
 
-        # INTENTIONAL ASSESSMENT ISSUE
-        if record["log_level"] == "WARNING":
+        if log_level in {"WARNING", "ERROR"}:
             reasons.append("Error log detected")
 
         if not reasons:
